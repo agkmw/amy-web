@@ -36,7 +36,7 @@ a {
 
 .button {
   background: transparent;
-  font-size: 1.3rem;
+  font-size: var(--font-size);
   padding: 0.5rem;
   border: none;
   border-bottom: 3px solid;
@@ -70,8 +70,13 @@ a {
   gap: 3rem;
 }
 
-.nav__list--item {
+.nav__list-item {
   cursor: pointer;
+}
+
+.button.nav__list-item--button {
+  background: transparent;
+  border: none;
 }
 
 .nav__actions--button:first-child {
@@ -79,4 +84,8 @@ a {
   margin-right: 0.5rem;
   background: #ccc;
   color: var(--text-color-on-secondary);
+}
+
+.main__container:not(.main__container[data-active]) {
+  display: none;
 }
