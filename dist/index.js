@@ -1,13 +1,12 @@
-<!doctype html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Art Museum of Yangon</title>
-    <link rel="stylesheet" href="styles/index.css" />
-  </head>
-  <body>
-    <header>
+"use strict";
+function App() {
+    const app = document.getElementById("app");
+    app?.appendChild(Header());
+    console.log(app);
+}
+function Header() {
+    const header = document.createElement("header");
+    header.innerHTML = `
       <nav class="nav">
         <h1 class="nav__logo"><a href="./index.html">AMY</a></h1>
         <ul class="nav__list">
@@ -24,8 +23,7 @@
           </button>
         </div>
       </nav>
-    </header>
-    <main></main>
-    <footer></footer>
-  </body>
-</html>
+   `;
+    return header;
+}
+App();
