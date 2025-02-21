@@ -8,56 +8,178 @@ function App(): void {
   app?.append(headerEl, mainEl);
 }
 
+function AddClasses(elem: HTMLElement, classNames: string[]): void {
+  for (let i = 0; i < classNames.length; i++) {
+    elem.classList.add(classNames[i]);
+  }
+}
+
+function AddAttributes(
+  elem: HTMLElement,
+  attributes: { property: string; value: string }[],
+): void {
+  for (const attribute of attributes) {
+    elem.setAttribute(attribute.property, attribute.value);
+  }
+}
+
+function Button({
+  classNames = [],
+  content = "",
+  attributes = [],
+}: {
+  classNames: string[];
+  content: string;
+  attributes: { property: string; value: string }[];
+}): HTMLButtonElement {
+  const buttonEl = document.createElement("button");
+  AddClasses(buttonEl, classNames);
+  AddAttributes(buttonEl, attributes);
+  buttonEl.innerHTML = content;
+  return buttonEl;
+}
+
+function Link({
+  classNames = [],
+  content = "",
+  attributes = [],
+}: {
+  classNames: string[];
+  content: string;
+  attributes: { property: string; value: string }[];
+}): HTMLAnchorElement {
+  const anchorEl = document.createElement("a");
+  AddClasses(anchorEl, classNames);
+  AddAttributes(anchorEl, attributes);
+  anchorEl.textContent = content;
+  return anchorEl;
+}
+
+function ListItem({
+  classNames = [],
+  content = "",
+}: {
+  classNames: string[];
+  content: HTMLElement | string;
+}): HTMLElement {
+  const listItemEl = document.createElement("li");
+  AddClasses(listItemEl, classNames);
+  listItemEl.append(content);
+  return listItemEl;
+}
+
+function List({
+  classNames = [],
+  listItems = [document.createElement("li")],
+}: {
+  classNames: string[];
+  listItems: HTMLElement[];
+}): HTMLUListElement {
+  const list = document.createElement("ul");
+  AddClasses(list, classNames);
+  for (let i = 0; i < listItems.length; i++) {
+    list.appendChild(listItems[i]);
+  }
+  return list;
+}
+
+function Nav(): HTMLElement {
+  const navEl = document.createElement("nav");
+  AddClasses(navEl, ["nav"]);
+
+  const navLogo = NavLogo();
+  const navList = NavList();
+  navEl.appendChild(navLogo);
+  navEl.appendChild(navList);
+
+  const navMenu = Button({
+    content: `Menu ${svgMenu()}`,
+    classNames: ["button", "nav__menu"],
+    attributes: [
+      { property: "data-state", value: "menu-open" },
+      { property: "type", value: "button" },
+    ],
+  });
+  navEl.appendChild(navMenu);
+
+  const navActions = NavActions();
+  navEl.appendChild(navActions);
+
+  return navEl;
+}
+
+function NavLogo(): HTMLHeadElement {
+  const headingEl = document.createElement("h2");
+  AddClasses(headingEl, ["nav__logo"]);
+  const anchorEl = Link({
+    content: "AMY",
+    attributes: [
+      { property: "href", value: "#" },
+      { property: "data-state", value: "home" },
+    ],
+    classNames: [],
+  });
+  headingEl.appendChild(anchorEl);
+  return headingEl;
+}
+
+function NavList(): HTMLElement {
+  const navItems = ["Gallery", "About", "Contact"];
+  const navListItems: HTMLElement[] = [];
+
+  for (let i = 0; i < navItems.length; i++) {
+    const currentNavItem = navItems[i];
+    const button = Button({
+      content: `${currentNavItem} ${svgChevronRight()}`,
+      classNames: ["button", "nav__list-item--button"],
+      attributes: [
+        { property: "data-state", value: currentNavItem.toLowerCase() },
+        { property: "type", value: "button" },
+      ],
+    });
+
+    const listItem = ListItem({
+      classNames: ["nav__list-item"],
+      content: button,
+    });
+    navListItems.push(listItem);
+  }
+
+  const navList = List({
+    classNames: ["nav__list"],
+    listItems: navListItems,
+  });
+
+  return navList;
+}
+
+function NavActions(): HTMLDivElement {
+  const divEl = document.createElement("div");
+  AddClasses(divEl, ["nav__actions"]);
+
+  const actions = ["Buy Tickets", "Membership"];
+  const actionButtons: HTMLButtonElement[] = [];
+
+  for (let i = 0; i < actions.length; i++) {
+    const actionButton = Button({
+      content: actions[i],
+      classNames: ["button", "nav__actions--button"],
+      attributes: [{ property: "type", value: "button" }],
+    });
+    actionButtons.push(actionButton);
+  }
+
+  for (let i = 0; i < actionButtons.length; i++) {
+    divEl.appendChild(actionButtons[i]);
+  }
+
+  return divEl;
+}
+
 function Header(): HTMLElement {
   const headerEl = document.createElement("header");
-  headerEl.innerHTML = `
-    <nav class="nav">
-      <h1 class="nav__logo"><a href="#" data-state="home">AMY</a></h1>
-      <button class="button nav__menu" data-state="menu-open">
-            Menu
-            ${svgMenu()}
-        </button>
-      <ul class="nav__list">
-        <li class="nav__list-item">
-          <button
-            class="button nav__list-item--button"
-            data-state="gallery"
-            type="button"
-          >
-            Gallery
-          </button>
-        </li>
-
-        <li class="nav__list-item">
-          <button
-            class="button nav__list-item--button"
-            data-state="about"
-            type="button"
-          >
-            About
-          </button>
-        </li>
-        <li class="nav__list-item">
-          <button
-            class="button nav__list-item--button"
-            data-state="contact"
-            type="button"
-          >
-            Contact
-          </button>
-        </li>
-      </ul>
-      <div class="nav__actions">
-        <button class="button nav__actions--button" type="button">
-          Buy Tickets
-        </button>
-        <button class="button nav__actions--button" type="button">
-                Membership
-        </button>
-      </div>
-    </nav>
-   `;
-
+  const navEl = Nav();
+  headerEl.appendChild(navEl);
   return headerEl;
 }
 
@@ -71,7 +193,7 @@ function headerElClickHandler(e: Event): void {
     return;
   }
   if (state !== "") {
-    setState(state);
+    setPageState(state);
     return;
   }
 }
@@ -107,7 +229,7 @@ function Main(): HTMLElement {
   return mainEl;
 }
 
-function setState(state: string): void {
+function setPageState(state: string): void {
   const currentPage = document.querySelector(
     ".main__container[data-active]",
   ) as HTMLElement;
@@ -117,6 +239,8 @@ function setState(state: string): void {
     `.main__container[data-show="${state}"]`,
   ) as HTMLElement;
   nextPage.setAttribute("data-active", "");
+
+  menuHandler("menu-close");
 }
 
 function svgMenu(): string {
@@ -156,6 +280,23 @@ function svgClose(): string {
           </clipPath>
         </defs>
       </svg>`;
+}
+
+function svgChevronRight(): string {
+  return `
+    <svg
+      class="chevron-right"
+      width="20px"
+      height="20px"
+      viewBox="0 0 256 256"
+      id="Flat"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path
+        d="M96,212a4,4,0,0,1-2.82861-6.82837L170.34326,128,93.17139,50.82837a4.00009,4.00009,0,0,1,5.65722-5.65674l80,80a4,4,0,0,1,0,5.65674l-80,80A3.98805,3.98805,0,0,1,96,212Z"
+      />
+    </svg>
+    `;
 }
 
 App();

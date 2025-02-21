@@ -3,6 +3,7 @@
   --text-color-on-primary: #222;
   --color-secondary: #555;
   --text-color-on-secondary: #ddd;
+  --color-softwhite: #ccc;
   --font-size: 1.4rem;
   --max-width: 1500px;
   --times-new-roman: "Times New Roman", Times, serif;
@@ -45,6 +46,7 @@ a {
 
 svg {
   pointer-events: none;
+  fill: var(--color-secondary);
 }
 
 .button {
@@ -98,6 +100,9 @@ svg {
 .nav__list-item--button.button {
   border: none;
 }
+.nav__list-item svg.chevron-right {
+  display: none;
+}
 
 .nav__actions--button:first-child {
   border: 2px solid transparent;
@@ -149,15 +154,22 @@ svg {
     flex-direction: column;
     background: var(--color-primary);
     padding: var(--section-padding);
-    transition: left 0.3s ease-in;
+    transition: left 0.2s ease-out;
   }
   .nav__list-item {
     justify-self: flex-start;
   }
-  .nav__list-item--button {
-    width: 30%;
+  .nav__list-item--button.button {
+    border-bottom: 1px solid var(--color-softwhite);
+    width: 100%;
     text-align: start;
     padding: 0.75rem 0px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .nav__list-item svg.chevron-right {
+    display: inline-block;
   }
 
   .nav--visible {
