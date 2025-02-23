@@ -1,13 +1,21 @@
+@font-face {
+  font-family: "Bemirs";
+  src: url("../assets/fonts/BemirsDemoVersionRegular-L360Z.ttf");
+}
+
 :root {
+  --color-header: #6a7f58;
+  --color-header-darker: #526344;
   --color-primary: #eee;
-  --text-color-on-primary: #222;
-  --color-secondary: #555;
+  --text-color-on-primary: #333;
+  --color-secondary: #444;
   --text-color-on-secondary: #ddd;
   --color-softwhite: #ccc;
-  --font-size: 1.4rem;
+  --font-size: 1.5rem;
   --max-width: 1500px;
+  --bemirs: "Bemirs";
   --times-new-roman: "Times New Roman", Times, serif;
-  --helvetica: Helvetica, Arial, sans-serif;
+  --gill-sans: "Gill Sans", "Gill Sans MT", Calibri, "Trebuchet MS", sans-serif;
   --section-padding: 1rem 2rem;
 }
 
@@ -27,7 +35,7 @@ body {
   font-size: var(--font-size);
   background: var(--color-primary);
   color: var(--text-color-on-primary);
-  font-family: var(--helvetica);
+  font-family: var(--gill-sans);
 }
 
 #app {
@@ -46,7 +54,6 @@ a {
 
 svg {
   pointer-events: none;
-  fill: var(--color-secondary);
 }
 
 .button {
@@ -54,10 +61,11 @@ svg {
   font-size: var(--font-size);
   padding: 0.5rem;
   border: none;
-  border-bottom: 3px solid;
+  border-radius: 4px;
   color: var(--text-color-on-primary);
-  font-family: var(--helvetica);
+  font-family: var(--gill-sans);
   cursor: pointer;
+  transition: all 0.3s ease-in;
 }
 
 /* nav */
@@ -68,19 +76,34 @@ svg {
   padding: var(--section-padding);
   column-gap: 2rem;
   align-items: center;
-  height: 90px;
-  position: sticky;
-  top: 0;
-  left: 0;
+  height: 100px;
+  background: var(--color-header);
 }
 
 .nav__logo {
-  font-size: calc(2 * var(--font-size));
-  font-family: var(--times-new-roman);
+  font-size: 3.5rem;
+  font-family: var(--bemirs);
   cursor: pointer;
-  letter-spacing: -0.5rem;
-  color: var(--text-color-on-primary);
+  color: var(--color-primary);
   z-index: 5;
+  padding: 6px 8px;
+  overflow: hidden;
+  position: relative;
+}
+.nav__logo::after {
+  content: "";
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  position: absolute;
+  background: var(--color-header-darker);
+  transition: all 0.3s ease-in;
+  scale: 0;
+  z-index: -1;
+}
+.nav__logo:hover::after {
+  scale: 2;
 }
 
 .nav__menu {
@@ -97,21 +120,87 @@ svg {
 .nav__list-item {
   cursor: pointer;
 }
+.nav__list-item--button {
+  position: relative;
+  overflow: hidden;
+}
 .nav__list-item--button.button {
+  color: var(--color-primary);
   border: none;
 }
 .nav__list-item svg.chevron-right {
   display: none;
 }
 
-.nav__actions--button:first-child {
-  border: 2px solid transparent;
-  margin-right: 0.5rem;
-  background: var(--color-secondary);
-  color: var(--text-color-on-secondary);
+.nav svg {
+  fill: var(--color-primary);
 }
 
-/* nav tablet and mobile design */
+.nav__actions {
+  display: flex;
+  justify-content: center;
+  gap: 0.75rem;
+}
+.nav__actions--button {
+  color: var(--color-primary);
+}
+
+/* banner section */
+
+.banner {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 90vh;
+  max-height: 700px;
+  font-family: "Gill Sans", "Gill Sans MT", Calibri, "Trebuchet MS", sans-serif;
+  font-weight: 300;
+  position: relative;
+  color: #fff;
+}
+
+.banner__image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  position: absolute;
+  z-index: -1;
+  filter: brightness(0.7);
+}
+
+.banner__content {
+  text-align: center;
+  z-index: 1;
+}
+
+.banner__content-heading {
+  font-size: 3rem;
+  margin-bottom: 1rem;
+  font-weight: 300;
+  letter-spacing: 2px;
+}
+
+.banner__content-button {
+  padding: 1rem 2rem;
+  font-size: 1.5rem;
+  border: 2px solid #fff;
+  background: transparent;
+  color: #fff;
+  cursor: pointer;
+  border-radius: 4px;
+  transition:
+    background-color 0.3s ease-in,
+    color 0.3s ease-in;
+  margin-top: 1rem;
+}
+.banner__content-button:active {
+  transform: scale(0.95);
+}
+.banner__content-button:hover {
+  background-color: #fff;
+  color: #666;
+}
 
 @media (max-width: 900px) {
   body {
@@ -123,12 +212,11 @@ svg {
     grid-template-areas:
       "logo menu"
       "logo actions";
-    height: 120px;
-    row-gap: 0.5rem;
   }
 
   .nav__logo {
     grid-area: logo;
+    align-self: center;
   }
 
   .nav__menu {
@@ -139,29 +227,40 @@ svg {
     border: none;
     justify-self: flex-end;
     gap: 6px;
+    color: var(--color-primary);
   }
   .nav__menu svg {
     width: 20px;
     height: 23px;
+    fill: var(--color-primary);
+  }
+  .nav__menu svg.close path {
+    fill: var(--color-primary);
   }
 
   .nav__list {
     position: absolute;
-    top: 120px;
+    top: 100px;
     left: -120%;
-    width: 100vw;
+    width: 100%;
     display: flex;
     flex-direction: column;
-    background: var(--color-primary);
+    background: var(--color-header);
+    color: var(--color-primary);
+    --section-padding: 0.75rem;
     padding: var(--section-padding);
     transition: left 0.2s ease-out;
+    z-index: 5;
+    gap: 0;
   }
   .nav__list-item {
+    margin-bottom: 1rem;
     justify-self: flex-start;
   }
   .nav__list-item--button.button {
     border-bottom: 1px solid var(--color-softwhite);
     width: 100%;
+    border-radius: 0;
     text-align: start;
     padding: 0.75rem 0px;
     display: flex;
@@ -180,13 +279,7 @@ svg {
     grid-area: actions;
     display: flex;
     justify-self: self-end;
-  }
-  .nav__actions--button,
-  .nav__actions--button:first-child {
-    border: none;
-    background: transparent;
-    margin-right: 0;
-    color: var(--text-color-on-primary);
+    gap: 0.5rem;
   }
 }
 
@@ -198,5 +291,61 @@ svg {
   .nav {
     column-gap: 1rem;
     padding: 0.75rem;
+  }
+}
+
+@media (min-width: 900px) {
+  .nav__list-item--button::after {
+    content: "";
+    position: absolute;
+    width: 100%;
+    height: 3px;
+    top: 90%;
+    left: -100%;
+    opacity: 0;
+    background: var(--color-primary);
+    z-index: 5;
+    transition:
+      left 0.3s ease-in,
+      opacity 0.3s ease-in;
+  }
+  .nav__list-item--button:hover::after {
+    opacity: 1;
+    left: 0;
+  }
+  .nav__actions--button:first-child {
+    border: 2px solid var(--color-primary);
+  }
+  .nav__actions--button:first-child:hover {
+    color: var(--color-header);
+    background: var(--color-primary);
+  }
+  .nav__actions--button:last-child {
+    border-radius: 0;
+    border-bottom: 3px solid;
+    position: relative;
+    z-index: 1;
+    overflow: hidden;
+  }
+  .nav__actions--button:last-child::before {
+    content: "";
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    top: 100%;
+    left: 0;
+    background: var(--color-primary);
+    z-index: -1;
+    transition:
+      top 0.3s ease-in,
+      opacity 0.3s ease-in;
+  }
+  .nav__actions--button:last-child:hover {
+    color: var(--color-header);
+  }
+  .nav__actions--button:last-child:hover::before {
+    opacity: 1;
+    top: 0;
   }
 }

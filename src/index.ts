@@ -220,13 +220,74 @@ function Main(): HTMLElement {
   const mainEl = document.createElement("main");
 
   mainEl.innerHTML = `
-    <div class="main__container" data-show="home" data-active>homepage</div>
     <div class="main__container" data-show="gallery">gallery page</div>
     <div class="main__container" data-show="about">about page</div>
     <div class="main__container" data-show="contact">contact page</div>
     `;
 
+  const homepage = HomePage();
+  mainEl.appendChild(homepage);
+
   return mainEl;
+}
+
+function HomePage(): HTMLElement {
+  const container = document.createElement("div");
+  AddClasses(container, ["main__container"]);
+  AddAttributes(container, [{ property: "data-show", value: "home" }]);
+  const banner = MainBanner();
+  container.appendChild(banner);
+  return banner;
+}
+
+function MainBanner(): HTMLElement {
+  const sectionEl = document.createElement("section");
+  AddClasses(sectionEl, ["banner"]);
+  AddAttributes(sectionEl, [{ property: "id", value: "banner" }]);
+
+  const bannerImage = ImageTag({
+    src: "./src/assets/dannie-jing-3GZlhROZIQg-unsplash.jpg",
+    alt: "Art Museum of Yangon",
+    classNames: ["banner__image"],
+  });
+  sectionEl.appendChild(bannerImage);
+
+  const bannerText = document.createElement("div");
+  AddClasses(bannerText, ["banner__content"]);
+
+  const bannerHeading = document.createElement("h1");
+  AddClasses(bannerHeading, ["banner__content-heading"]);
+  bannerHeading.innerText = "WELCOME TO THE ART MUSEUM OF YANGON";
+  bannerText.appendChild(bannerHeading);
+
+  const bannerButton = Button({
+    attributes: [{ property: "type", value: "button" }],
+    classNames: ["banner__content-button"],
+    content: "Plan your visit",
+  });
+  bannerText.appendChild(bannerButton);
+
+  sectionEl.appendChild(bannerText);
+
+  return sectionEl;
+}
+
+function ImageTag({
+  src = "",
+  alt = "",
+  classNames = [],
+}: {
+  src: string;
+  alt: string;
+  classNames: string[];
+}): HTMLImageElement {
+  const imageEl = document.createElement("img");
+  AddClasses(imageEl, classNames);
+  AddAttributes(imageEl, [
+    { property: "src", value: src },
+    { property: "alt", value: alt },
+  ]);
+  return imageEl;
 }
 
 function setPageState(state: string): void {
@@ -254,7 +315,6 @@ function svgMenu(): string {
       >
         <path
           d="M0 4.5C0 3.67031 0.670312 3 1.5 3H19.5C20.3297 3 21 3.67031 21 4.5C21 5.32969 20.3297 6 19.5 6H1.5C0.670312 6 0 5.32969 0 4.5ZM0 12C0 11.1703 0.670312 10.5 1.5 10.5H19.5C20.3297 10.5 21 11.1703 21 12C21 12.8297 20.3297 13.5 19.5 13.5H1.5C0.670312 13.5 0 12.8297 0 12ZM21 19.5C21 20.3297 20.3297 21 19.5 21H1.5C0.670312 21 0 20.3297 0 19.5C0 18.6703 0.670312 18 1.5 18H19.5C20.3297 18 21 18.6703 21 19.5Z"
-          fill="#222"
         />
       </svg>`;
 }
@@ -265,7 +325,6 @@ function svgClose(): string {
         width="25"
         height="29"
         viewBox="0 0 19 23"
-        fill="none"
         xmlns="http://www.w3.org/2000/svg"
       >
         <g clip-path="url(#clip0_2_236)">

@@ -36,6 +36,13 @@ declare function Header(): HTMLElement;
 declare function headerElClickHandler(e: Event): void;
 declare function menuHandler(currentState: string): void;
 declare function Main(): HTMLElement;
+declare function HomePage(): HTMLElement;
+declare function MainBanner(): HTMLElement;
+declare function ImageTag({ src, alt, classNames, }: {
+    src: string;
+    alt: string;
+    classNames: string[];
+}): HTMLImageElement;
 declare function setPageState(state: string): void;
 declare function svgMenu(): string;
 declare function svgClose(): string;
