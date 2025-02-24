@@ -276,7 +276,7 @@ function FooterSectionPageNav() {
 }
 function FooterSectionMap() {
     const section = document.createElement("li");
-    AddClasses(section, ["footer__section", "footer__section-hidden-small"]);
+    AddClasses(section, ["footer__section", "footer__section--hidden-small"]);
     const sectionWrapper = document.createElement("div");
     AddClasses(sectionWrapper, ["footer__section-wrapper"]);
     const mapContainer = document.createElement("div");
@@ -325,7 +325,7 @@ function FooterSectionMap() {
 }
 function FooterSectionGroupOne() {
     const section = document.createElement("li");
-    AddClasses(section, ["footer__section", "footer__section-hidden-small"]);
+    AddClasses(section, ["footer__section", "footer__section--hidden-small"]);
     const group = document.createElement("div");
     AddClasses(group, ["footer__section-group"]);
     const groupItemData = [
@@ -360,7 +360,7 @@ function FooterSectionGroupOne() {
 }
 function FooterSectionGroupTwo() {
     const section = document.createElement("li");
-    AddClasses(section, ["footer__section", "footer__section-hidden-small"]);
+    AddClasses(section, ["footer__section"]);
     const group = document.createElement("div");
     AddClasses(group, ["footer__section-group"]);
     const groupItemData = [

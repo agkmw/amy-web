@@ -373,7 +373,7 @@ function FooterSectionPageNav(): HTMLLIElement {
 
 function FooterSectionMap(): HTMLLIElement {
   const section = document.createElement("li");
-  AddClasses(section, ["footer__section", "footer__section-hidden-small"]);
+  AddClasses(section, ["footer__section", "footer__section--hidden-small"]);
 
   const sectionWrapper = document.createElement("div");
   AddClasses(sectionWrapper, ["footer__section-wrapper"]);
@@ -430,7 +430,7 @@ function FooterSectionMap(): HTMLLIElement {
 
 function FooterSectionGroupOne(): HTMLLIElement {
   const section = document.createElement("li");
-  AddClasses(section, ["footer__section", "footer__section-hidden-small"]);
+  AddClasses(section, ["footer__section", "footer__section--hidden-small"]);
 
   const group = document.createElement("div");
   AddClasses(group, ["footer__section-group"]);
@@ -471,7 +471,7 @@ function FooterSectionGroupOne(): HTMLLIElement {
 
 function FooterSectionGroupTwo(): HTMLLIElement {
   const section = document.createElement("li");
-  AddClasses(section, ["footer__section", "footer__section-hidden-small"]);
+  AddClasses(section, ["footer__section"]);
 
   const group = document.createElement("div");
   AddClasses(group, ["footer__section-group"]);
