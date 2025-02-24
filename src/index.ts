@@ -4,8 +4,9 @@ function App(): void {
   headerEl.addEventListener("click", headerElClickHandler);
 
   const mainEl = Main();
+  const footerEl = Footer();
 
-  app?.append(headerEl, mainEl);
+  app?.append(headerEl, mainEl, footerEl);
 }
 
 function AddClasses(elem: HTMLElement, classNames: string[]): void {
@@ -45,13 +46,17 @@ function Link({
   attributes = [],
 }: {
   classNames: string[];
-  content: string;
+  content: string | HTMLElement;
   attributes: { property: string; value: string }[];
 }): HTMLAnchorElement {
   const anchorEl = document.createElement("a");
   AddClasses(anchorEl, classNames);
   AddAttributes(anchorEl, attributes);
-  anchorEl.textContent = content;
+  if (typeof content === "string") {
+    anchorEl.innerHTML = content;
+  } else {
+    anchorEl.appendChild(content);
+  }
   return anchorEl;
 }
 
@@ -61,10 +66,14 @@ function ListItem({
 }: {
   classNames: string[];
   content: HTMLElement | string;
-}): HTMLElement {
+}): HTMLLIElement {
   const listItemEl = document.createElement("li");
   AddClasses(listItemEl, classNames);
-  listItemEl.append(content);
+  if (typeof content === "string") {
+    listItemEl.innerHTML = content;
+  } else {
+    listItemEl.appendChild(content);
+  }
   return listItemEl;
 }
 
@@ -93,7 +102,7 @@ function Nav(): HTMLElement {
   navEl.appendChild(navList);
 
   const navMenu = Button({
-    content: `Menu ${svgMenu()}`,
+    content: `Menu ${SvgMenu()}`,
     classNames: ["button", "nav__menu"],
     attributes: [
       { property: "data-state", value: "menu-open" },
@@ -130,7 +139,7 @@ function NavList(): HTMLElement {
   for (let i = 0; i < navItems.length; i++) {
     const currentNavItem = navItems[i];
     const button = Button({
-      content: `${currentNavItem} ${svgChevronRight()}`,
+      content: `${currentNavItem} ${SvgChevronRight()}`,
       classNames: ["button", "nav__list-item--button"],
       attributes: [
         { property: "data-state", value: currentNavItem.toLowerCase() },
@@ -203,7 +212,7 @@ function menuHandler(currentState: string): void {
   const navList = document.querySelector(".nav__list");
   const nextState = currentState === "menu-open" ? "menu-close" : "menu-open";
   const menuContent =
-    nextState === "menu-close" ? svgClose() : `Menu ${svgMenu()}`;
+    nextState === "menu-close" ? SvgClose() : `Menu ${SvgMenu()}`;
 
   console.log("nextState: ", nextState, "\ncurrentState: ", currentState);
   menuBtn.dataset.state = nextState;
@@ -290,6 +299,275 @@ function ImageTag({
   return imageEl;
 }
 
+function Footer(): HTMLElement {
+  const footerEl = document.createElement("footer");
+  AddClasses(footerEl, ["footer"]);
+  footerEl.appendChild(FooterContainer());
+  return footerEl;
+}
+
+function FooterContainer(): HTMLDivElement {
+  const footerContainer = document.createElement("div");
+  AddClasses(footerContainer, ["footer__container"]);
+
+  const footerBackToTop = Link({
+    classNames: ["footer__back-to-top"],
+    attributes: [{ property: "href", value: "#banner" }],
+    content: `<span> BACK TO TOP </span> ${SvgChevronTop()}`,
+  });
+  footerContainer.appendChild(footerBackToTop);
+
+  footerContainer.appendChild(FooterSections());
+
+  footerContainer.appendChild(FooterLegalLinks());
+
+  return footerContainer;
+}
+
+function FooterSections(): HTMLUListElement {
+  const footerSections = document.createElement("ul");
+  AddClasses(footerSections, ["footer__sections"]);
+
+  const footerSectionPageNav = FooterSectionPageNav();
+  const footerSectionMap = FooterSectionMap();
+  const footerSectionGroupOne = FooterSectionGroupOne();
+  const footerSectionGroupTwo = FooterSectionGroupTwo();
+
+  footerSections.appendChild(footerSectionPageNav);
+  footerSections.appendChild(footerSectionMap);
+  footerSections.appendChild(footerSectionGroupOne);
+  footerSections.appendChild(footerSectionGroupTwo);
+
+  return footerSections;
+}
+
+function FooterSectionPageNav(): HTMLLIElement {
+  const section = document.createElement("li");
+  AddClasses(section, ["footer__section"]);
+
+  const sectionWrapper = document.createElement("div");
+  AddClasses(sectionWrapper, ["footer__section-wrapper"]);
+
+  const logo = Link({
+    content: "AMY",
+    classNames: ["footer__logo"],
+    attributes: [{ property: "href", value: "#banner" }],
+  });
+  sectionWrapper.appendChild(logo);
+
+  const navItems = ["Visit", "Exhibition", "The Collection"];
+  const navList = List({
+    classNames: ["footer__nav-list"],
+    listItems: navItems.map((navItem) =>
+      ListItem({
+        classNames: ["footer__nav-item"],
+        content: navItem,
+      }),
+    ),
+  });
+  sectionWrapper.appendChild(navList);
+
+  section.appendChild(sectionWrapper);
+  return section;
+}
+
+function FooterSectionMap(): HTMLLIElement {
+  const section = document.createElement("li");
+  AddClasses(section, ["footer__section", "footer__section-hidden-small"]);
+
+  const sectionWrapper = document.createElement("div");
+  AddClasses(sectionWrapper, ["footer__section-wrapper"]);
+
+  const mapContainer = document.createElement("div");
+  AddClasses(mapContainer, ["footer__map"]);
+
+  const anchorEl = Link({
+    attributes: [{ property: "href", value: "#" }],
+    classNames: [],
+    content: ImageTag({
+      src: "./src/assets/dannie-jing-3GZlhROZIQg-unsplash.jpg",
+      alt: "Interior Design",
+      classNames: [],
+    }),
+  });
+  mapContainer.appendChild(anchorEl);
+  sectionWrapper.appendChild(mapContainer);
+
+  const locations = [
+    {
+      title: "Michigan Avenue Entrance",
+      streetAddress: "111 South Michigan Avenue",
+      zipCode: "Chicago, IL 60603",
+    },
+    {
+      title: "Modern Wing Entrance",
+      streetAddress: "159 East Monroe Street",
+      zipCode: "Chicago, IL 60603",
+    },
+  ];
+  const locationList = List({
+    classNames: ["footer__location-list"],
+    listItems: locations.map((location) =>
+      ListItem({
+        classNames: ["footer__location"],
+        content: `
+            <h3 class="footer__location-title">
+                ${location.title}
+            </h3>
+            <a href="#" class="footer__location-address">
+                <span> ${location.streetAddress} </span>
+                <span> ${location.zipCode} </span>
+            </a>
+        `,
+      }),
+    ),
+  });
+  sectionWrapper.appendChild(locationList);
+
+  section.appendChild(sectionWrapper);
+  return section;
+}
+
+function FooterSectionGroupOne(): HTMLLIElement {
+  const section = document.createElement("li");
+  AddClasses(section, ["footer__section", "footer__section-hidden-small"]);
+
+  const group = document.createElement("div");
+  AddClasses(group, ["footer__section-group"]);
+
+  const groupItemData = [
+    {
+      title: "About",
+      navList: [
+        "Mission and History",
+        "Leadership",
+        "Departments",
+        "Financial Reporting",
+      ],
+    },
+    {
+      title: "Support Us",
+      navList: [
+        "Membership",
+        "Luminary",
+        "Planned Giving",
+        "Corporate Sponsorship",
+      ],
+    },
+  ];
+
+  groupItemData.forEach((data) => {
+    const groupItem = FooterSectionGroupItem({
+      title: data.title,
+      navItems: data.navList,
+    });
+    group.appendChild(groupItem);
+  });
+
+  section.appendChild(group);
+
+  return section;
+}
+
+function FooterSectionGroupTwo(): HTMLLIElement {
+  const section = document.createElement("li");
+  AddClasses(section, ["footer__section", "footer__section-hidden-small"]);
+
+  const group = document.createElement("div");
+  AddClasses(group, ["footer__section-group"]);
+
+  const groupItemData = [
+    {
+      title: "Learn with us",
+      navList: ["Families", "Teens", "Educators", "Ryan Learning Center"],
+    },
+    {
+      title: "Follow us",
+      navList: ["Facebook", "Twitter", "Instagram", "YouTube"],
+    },
+  ];
+
+  groupItemData.forEach((data) => {
+    const groupItem = FooterSectionGroupItem({
+      title: data.title,
+      navItems: data.navList,
+    });
+    group.appendChild(groupItem);
+  });
+
+  section.appendChild(group);
+
+  return section;
+}
+
+function FooterSectionGroupItem({
+  title,
+  navItems,
+}: {
+  title: string;
+  navItems: string[];
+}): HTMLDivElement {
+  const groupItem = document.createElement("div");
+  AddClasses(groupItem, ["footer__section-group-item"]);
+
+  const sectionTitle = Heading({
+    level: "h3",
+    classNames: ["footer__section-title"],
+    content: title,
+  });
+  groupItem.appendChild(sectionTitle);
+
+  const navList = List({
+    classNames: ["footer__nav-list"],
+    listItems: navItems.map((navItem) =>
+      ListItem({
+        classNames: ["footer__nav-item"],
+        content: navItem,
+      }),
+    ),
+  });
+  groupItem.appendChild(navList);
+
+  return groupItem;
+}
+
+function Heading({
+  level = "h3",
+  classNames = [],
+  content = "",
+}: {
+  level: string;
+  classNames: string[];
+  content: string;
+}): HTMLElement {
+  const headingEl = document.createElement(`${level}`);
+  AddClasses(headingEl, classNames);
+  headingEl.textContent = content;
+  return headingEl;
+}
+
+function FooterLegalLinks(): HTMLUListElement {
+  const links = [
+    "Press",
+    "Careers",
+    "Contact",
+    "Venue Rental",
+    "Image Licensing",
+    "SAIC",
+    "Terms",
+  ];
+  const legalLinks = List({
+    classNames: ["footer__legal-links"],
+    listItems: links.map((link) =>
+      ListItem({
+        classNames: ["footer__legal-link"],
+        content: link,
+      }),
+    ),
+  });
+  return legalLinks;
+}
+
 function setPageState(state: string): void {
   const currentPage = document.querySelector(
     ".main__container[data-active]",
@@ -304,7 +582,7 @@ function setPageState(state: string): void {
   menuHandler("menu-close");
 }
 
-function svgMenu(): string {
+function SvgMenu(): string {
   return `<svg
         class="menu"
         width="25"
@@ -319,7 +597,7 @@ function svgMenu(): string {
       </svg>`;
 }
 
-function svgClose(): string {
+function SvgClose(): string {
   return `<svg
         class="close"
         width="25"
@@ -341,7 +619,7 @@ function svgClose(): string {
       </svg>`;
 }
 
-function svgChevronRight(): string {
+function SvgChevronRight(): string {
   return `
     <svg
       class="chevron-right"
@@ -355,6 +633,26 @@ function svgChevronRight(): string {
         d="M96,212a4,4,0,0,1-2.82861-6.82837L170.34326,128,93.17139,50.82837a4.00009,4.00009,0,0,1,5.65722-5.65674l80,80a4,4,0,0,1,0,5.65674l-80,80A3.98805,3.98805,0,0,1,96,212Z"
       />
     </svg>
+    `;
+}
+
+function SvgChevronTop(): string {
+  return `
+          <svg
+            width="30px"
+            height="30px"
+            viewBox="0 0 24 24"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <rect width="24" height="24" fill="none" />
+            <path
+              d="M7 14.5L12 9.5L17 14.5"
+              stroke="#aaa"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            />
+          </svg>
     `;
 }
 

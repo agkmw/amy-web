@@ -14,7 +14,7 @@ declare function Button({ classNames, content, attributes, }: {
 }): HTMLButtonElement;
 declare function Link({ classNames, content, attributes, }: {
     classNames: string[];
-    content: string;
+    content: string | HTMLElement;
     attributes: {
         property: string;
         value: string;
@@ -23,7 +23,7 @@ declare function Link({ classNames, content, attributes, }: {
 declare function ListItem({ classNames, content, }: {
     classNames: string[];
     content: HTMLElement | string;
-}): HTMLElement;
+}): HTMLLIElement;
 declare function List({ classNames, listItems, }: {
     classNames: string[];
     listItems: HTMLElement[];
@@ -43,7 +43,25 @@ declare function ImageTag({ src, alt, classNames, }: {
     alt: string;
     classNames: string[];
 }): HTMLImageElement;
+declare function Footer(): HTMLElement;
+declare function FooterContainer(): HTMLDivElement;
+declare function FooterSections(): HTMLUListElement;
+declare function FooterSectionPageNav(): HTMLLIElement;
+declare function FooterSectionMap(): HTMLLIElement;
+declare function FooterSectionGroupOne(): HTMLLIElement;
+declare function FooterSectionGroupTwo(): HTMLLIElement;
+declare function FooterSectionGroupItem({ title, navItems, }: {
+    title: string;
+    navItems: string[];
+}): HTMLDivElement;
+declare function Heading({ level, classNames, content, }: {
+    level: string;
+    classNames: string[];
+    content: string;
+}): HTMLElement;
+declare function FooterLegalLinks(): HTMLUListElement;
 declare function setPageState(state: string): void;
-declare function svgMenu(): string;
-declare function svgClose(): string;
-declare function svgChevronRight(): string;
+declare function SvgMenu(): string;
+declare function SvgClose(): string;
+declare function SvgChevronRight(): string;
+declare function SvgChevronTop(): string;
